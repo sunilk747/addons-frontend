@@ -14,7 +14,7 @@ type AddonStatus =
   | 'lite-nominated'
   | 'review-pending';
 
-type AddonFileType = {|
+export type AddonFileType = {|
   created: string,
   hash: string,
   id: number,

@@ -12,8 +12,7 @@ import tracking from 'core/tracking';
 import { INSTALL_STATE } from 'core/constants';
 import InfoDialog from 'core/components/InfoDialog';
 import { addChangeListeners } from 'core/addonManager';
-import { getAddonByGUID } from 'core/reducers/addons';
-import { getDiscoResults } from 'disco/actions';
+import { getDiscoResults } from 'disco/reducers/discoResults';
 import { NAVIGATION_CATEGORY } from 'disco/constants';
 import { makeQueryStringWithUTM } from 'disco/utils';
 import Addon from 'disco/components/Addon';
@@ -134,6 +133,7 @@ export class DiscoPaneBase extends React.Component {
         }}
       >
         {errorHandler.renderErrorIfPresent()}
+
         <header>
           <div className="disco-header">
             <div className="disco-content">
@@ -154,32 +154,29 @@ export class DiscoPaneBase extends React.Component {
 
         {this.renderFindMoreButton({ position: 'top' })}
 
-        {results.map((item) => (
-          <AddonComponent addon={item} key={item.guid} />
+        {results.map((discoResult) => (
+          <AddonComponent
+            addon={discoResult.addon}
+            heading={discoResult.heading}
+            description={discoResult.description}
+            key={discoResult.guid}
+          />
         ))}
 
         {this.renderFindMoreButton({ position: 'bottom' })}
+
         <InfoDialog />
       </div>
     );
   }
 }
 
-export function loadedAddons(state) {
-  return state.discoResults.map((result) => {
-    return {
-      ...result,
-      // `result` comes from the API call in `src/disco/api.js` and
-      // normalizer makes everything complicated...
-      // `result.addon` is actually the add-on's GUID.
-      ...getAddonByGUID(state, result.addon),
-    };
-  });
-}
-
 export function mapStateToProps(state) {
+  const { discoResults } = state;
+  const { results } = discoResults;
+
   return {
-    results: loadedAddons(state),
+    results,
   };
 }
 

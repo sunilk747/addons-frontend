@@ -1,29 +1,34 @@
-// Disabled because of
-// https://github.com/benmosher/eslint-plugin-import/issues/793
-/* eslint-disable import/order */
+/* @flow */
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-/* eslint-enable import/order */
-
-import { loadAddons } from 'core/reducers/addons';
 import log from 'core/logger';
+import { loadAddonResults } from 'core/reducers/addons';
 import { createErrorHandler, getState } from 'core/sagas/utils';
-import { loadDiscoResults } from 'disco/actions';
-import { GET_DISCO_RESULTS } from 'disco/constants';
+import {
+  GET_DISCO_RESULTS,
+  loadDiscoResults,
+} from 'disco/reducers/discoResults';
 import { getDiscoveryAddons } from 'disco/api';
+import type {
+  ExternalDiscoResultsType,
+  GetDiscoResultsAction,
+} from 'disco/reducers/discoResults';
 
 export function* fetchDiscoveryAddons({
   payload: { errorHandlerId, taarParams },
-}) {
+}: GetDiscoResultsAction): Generator<any, any, any> {
   const errorHandler = createErrorHandler(errorHandlerId);
   try {
     const state = yield select(getState);
-    const { entities, result } = yield call(getDiscoveryAddons, {
-      api: state.api,
-      taarParams,
-    });
 
-    yield put(loadAddons(entities));
-    yield put(loadDiscoResults({ entities, result }));
+    const { results }: ExternalDiscoResultsType = yield call(
+      getDiscoveryAddons,
+      {
+        api: state.api,
+        taarParams,
+      },
+    );
+
+    yield put(loadDiscoResults({ results }));
   } catch (error) {
     log.warn(`Failed to fetch discovery add-ons: ${error}`);
 
@@ -31,6 +36,6 @@ export function* fetchDiscoveryAddons({
   }
 }
 
-export default function* discoSaga() {
+export default function* discoSaga(): Generator<any, any, any> {
   yield takeLatest(GET_DISCO_RESULTS, fetchDiscoveryAddons);
 }

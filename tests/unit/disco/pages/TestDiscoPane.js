@@ -16,7 +16,7 @@ import {
 import { ErrorHandler } from 'core/errorHandler';
 import I18nProvider from 'core/i18n/Provider';
 import { createInternalAddon } from 'core/reducers/addons';
-import { getDiscoResults } from 'disco/actions';
+import { getDiscoResults } from 'disco/reducers/discoResults';
 import { NAVIGATION_CATEGORY } from 'disco/constants';
 import DiscoPane, {
   DiscoPaneBase,

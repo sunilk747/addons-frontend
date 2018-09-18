@@ -1,43 +1,29 @@
-import { normalize } from 'normalizr';
-
-import { loadAddons } from 'core/reducers/addons';
 import { ADDON_TYPE_EXTENSION } from 'core/constants';
-import { loadDiscoResults } from 'disco/actions';
-import { discoResult } from 'disco/api';
+import { loadDiscoResults } from 'disco/reducers/discoResults';
 import createStore from 'disco/store';
 import { fakeAddon } from 'tests/unit/amo/helpers';
 
 export function createFetchDiscoveryResult(results) {
-  // Simulate how getDiscoveryAddons() applies its schema.
-  return normalize({ results }, { results: [discoResult] });
+  return results;
 }
 
 /*
- * This takes addonResults (as if returned from the API)
- * and loads them into state the same way the real app does.
+ * This takes results (as if returned from the API) and loads them into state
+ * the same way the real app does.
  *
- * addonResults is an AddonResultType, like this:
- *
- *  type AddonResultType = {
- *    heading: string,
- *    description: string,
- *    addon: AddonType,
- *  };
- *  type AddonResultsType = Array<AddonResultType>;
+ * addonResults is an DiscoResultsType, see: `disco/reducers/discoResults`.
  */
 export function loadDiscoResultsIntoState(
-  addonResults,
+  results,
   { store = createStore().store } = {},
 ) {
-  const { entities, result } = createFetchDiscoveryResult(addonResults);
-  store.dispatch(loadAddons(entities));
-  store.dispatch(loadDiscoResults({ entities, result }));
+  store.dispatch(loadDiscoResults({ results }));
+
   return store.getState();
 }
 
 /*
- * A minimal add-on object, as returned by the API in a
- * Discovery result.
+ * A minimal add-on object, as returned by the API in a Discovery result.
  */
 export const fakeDiscoAddon = Object.freeze({
   current_version: {

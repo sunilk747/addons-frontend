@@ -41,8 +41,6 @@ export class AddonBase extends React.Component {
     _config: PropTypes.object,
     _tracking: PropTypes.object,
     addon: PropTypes.shape({
-      description: PropTypes.string,
-      heading: PropTypes.string.isRequired,
       icon_url: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       platformFiles: PropTypes.object,
@@ -50,9 +48,11 @@ export class AddonBase extends React.Component {
     }),
     clientApp: PropTypes.string.isRequired,
     defaultInstallSource: PropTypes.string.isRequired,
+    description: PropTypes.string,
     enable: PropTypes.func.isRequired,
     error: PropTypes.string,
     getBrowserThemeData: PropTypes.func.isRequired,
+    heading: PropTypes.string.isRequired,
     getClientCompatibility: PropTypes.func,
     hasAddonManager: PropTypes.bool.isRequired,
     i18n: PropTypes.object.isRequired,
@@ -141,7 +141,7 @@ export class AddonBase extends React.Component {
   }
 
   getDescription() {
-    const { addon } = this.props;
+    const { addon, description } = this.props;
 
     if (!addon || isTheme(addon.type)) {
       return null;
@@ -150,10 +150,11 @@ export class AddonBase extends React.Component {
     return (
       <div
         className="editorial-description"
-        dangerouslySetInnerHTML={sanitizeHTMLWithExternalLinks(
-          addon.description,
-          ['a', 'blockquote', 'cite'],
-        )}
+        dangerouslySetInnerHTML={sanitizeHTMLWithExternalLinks(description, [
+          'a',
+          'blockquote',
+          'cite',
+        ])}
       />
     );
   }
@@ -212,6 +213,7 @@ export class AddonBase extends React.Component {
       enable,
       getClientCompatibility,
       hasAddonManager,
+      heading,
       install,
       installTheme,
       isAddonEnabled,
@@ -264,10 +266,10 @@ export class AddonBase extends React.Component {
             <h2
               onClick={this.clickHeadingLink}
               className="heading"
-              dangerouslySetInnerHTML={sanitizeHTMLWithExternalLinks(
-                addon.heading,
-                ['a', 'span'],
-              )}
+              dangerouslySetInnerHTML={sanitizeHTMLWithExternalLinks(heading, [
+                'a',
+                'span',
+              ])}
             />
             {this.getDescription()}
           </div>
