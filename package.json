@@ -339,7 +339,7 @@
     "semver": "^5.3.0",
     "shelljs": "^0.8.0",
     "sinon": "^6.0.0",
-    "snyk": "^1.69.7",
+    "snyk": "^1.99.0",
     "style-loader": "^0.23.0",
     "stylelint": "^9.1.1",
     "stylelint-config-standard": "^18.2.0",
