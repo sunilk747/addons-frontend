@@ -580,6 +580,7 @@ export class AddonBase extends React.Component {
           <Helmet titleTemplate={null}>
             <title>{this.getPageTitle()}</title>
             {this.getMetaDescription()}
+            <link rel="canonical" href={addon.url} />
           </Helmet>
         )}
 

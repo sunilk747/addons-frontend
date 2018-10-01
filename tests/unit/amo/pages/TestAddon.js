@@ -1811,4 +1811,12 @@ describe(__filename, () => {
       `Download ${addon.name} for Firefox. ${addon.summary}`,
     );
   });
+
+  it('renders a canonical link tag', () => {
+    const addon = createInternalAddon(fakeAddon);
+    const root = shallowRender({ addon });
+
+    expect(root.find('link[rel="canonical"]')).toHaveLength(1);
+    expect(root.find('link[rel="canonical"]')).toHaveProp('href', addon.url);
+  });
 });
