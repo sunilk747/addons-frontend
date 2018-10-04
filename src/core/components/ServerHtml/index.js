@@ -116,6 +116,7 @@ export default class ServerHtml extends Component {
           <link rel="shortcut icon" href={this.getFaviconLink()} />
           {head.title.toComponent()}
           {head.meta.toComponent()}
+          {head.script.toComponent()}
           {this.getStyle()}
           {noScriptStyles ? (
             <noscript>

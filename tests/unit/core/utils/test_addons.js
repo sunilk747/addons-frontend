@@ -9,7 +9,11 @@ import {
   OS_WINDOWS,
 } from 'core/constants';
 import { createInternalAddon } from 'core/reducers/addons';
-import { getErrorMessage, getFileHash } from 'core/utils/addons';
+import {
+  getErrorMessage,
+  getFileHash,
+  getAddonStructuredData,
+} from 'core/utils/addons';
 import { fakeI18n } from 'tests/unit/helpers';
 import { createFakeAddon, fakeAddon } from 'tests/unit/amo/helpers';
 
@@ -118,6 +122,55 @@ describe(__filename, () => {
       });
 
       expect(_getFileHash({ addon })).toBeUndefined();
+    });
+  });
+
+  describe('getAddonStructuredData', () => {
+    it('returns structured data', () => {
+      const addon = createInternalAddon(fakeAddon);
+
+      expect(getAddonStructuredData({ addon })).toEqual({
+        '@context': 'http://schema.org/WebApplication',
+        '@type': 'WebApplication',
+        name: addon.name,
+        url: addon.url,
+        image: addon.previews[0].image_url,
+        applicationCategory: 'http://schema.org/OtherApplication',
+        operatingSystem: 'Firefox',
+        description: addon.summary,
+        offers: {
+          '@type': 'Offer',
+          availability: 'http://schema.org/InStock',
+          price: 0,
+          priceCurrency: 'USD',
+        },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingCount: addon.ratings.count,
+          ratingValue: addon.ratings.average,
+        },
+        version: addon.current_version.version,
+      });
+    });
+
+    it('returns structured data without the add-on version if not available', () => {
+      const addon = createInternalAddon({
+        ...fakeAddon,
+        current_version: null,
+      });
+
+      expect(getAddonStructuredData({ addon })).not.toHaveProperty('version');
+    });
+
+    it('returns structured data without rating if not available', () => {
+      const addon = createInternalAddon({
+        ...fakeAddon,
+        ratings: null,
+      });
+
+      expect(getAddonStructuredData({ addon })).not.toHaveProperty(
+        'aggregateRating',
+      );
     });
   });
 });

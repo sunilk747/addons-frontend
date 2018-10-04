@@ -46,7 +46,7 @@ import {
 } from 'core/constants';
 import { withInstallHelpers } from 'core/installAddon';
 import { isTheme, nl2br, sanitizeHTML, sanitizeUserHTML } from 'core/utils';
-import { getErrorMessage } from 'core/utils/addons';
+import { getAddonStructuredData, getErrorMessage } from 'core/utils/addons';
 import { getClientCompatibility as _getClientCompatibility } from 'core/utils/compatibility';
 import { getAddonIconUrl } from 'core/imageUtils';
 import translate from 'core/i18n/translate';
@@ -398,7 +398,7 @@ export class AddonBase extends React.Component {
     );
   }
 
-  getMetaDescription() {
+  renderMetaDescription() {
     const { addon, i18n } = this.props;
 
     const content = i18n.sprintf(
@@ -465,6 +465,17 @@ export class AddonBase extends React.Component {
           i18nValues,
         );
     }
+  }
+
+  renderJsonLinkedData() {
+    const { addon } = this.props;
+    const structuredData = getAddonStructuredData({ addon });
+
+    return (
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+    );
   }
 
   render() {
@@ -586,7 +597,8 @@ export class AddonBase extends React.Component {
         {addon && (
           <Helmet titleTemplate={null}>
             <title>{this.getPageTitle()}</title>
-            {this.getMetaDescription()}
+            {this.renderMetaDescription()}
+            {this.renderJsonLinkedData()}
           </Helmet>
         )}
 

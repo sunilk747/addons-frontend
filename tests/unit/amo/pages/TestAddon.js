@@ -1812,4 +1812,12 @@ describe(__filename, () => {
       `Download ${addon.name} for Firefox. ${addon.summary}`,
     );
   });
+
+  it('renders JSON linked data', () => {
+    const addon = createInternalAddon(fakeAddon);
+
+    const root = shallowRender({ addon });
+
+    expect(root.find('script[type="application/ld+json"]')).toHaveLength(1);
+  });
 });
