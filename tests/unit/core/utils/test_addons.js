@@ -10,9 +10,10 @@ import {
 } from 'core/constants';
 import { createInternalAddon } from 'core/reducers/addons';
 import {
+  getAddonStructuredData,
   getErrorMessage,
   getFileHash,
-  getAddonStructuredData,
+  removeUndefinedProps,
 } from 'core/utils/addons';
 import { fakeI18n } from 'tests/unit/helpers';
 import { createFakeAddon, fakeAddon } from 'tests/unit/amo/helpers';
@@ -171,6 +172,28 @@ describe(__filename, () => {
       expect(getAddonStructuredData({ addon })).not.toHaveProperty(
         'aggregateRating',
       );
+    });
+  });
+
+  describe('removeUndefinedProps', () => {
+    it('removes undefined properties', () => {
+      expect(removeUndefinedProps({ thing: undefined })).toEqual({});
+    });
+
+    it('preserves falsy properties', () => {
+      expect(removeUndefinedProps({ thing: false })).toEqual({ thing: false });
+    });
+
+    it('preserves other properties', () => {
+      expect(removeUndefinedProps({ thing: 'thing' })).toEqual({
+        thing: 'thing',
+      });
+    });
+
+    it('does not modify the original object', () => {
+      const example = { thing: undefined };
+      removeUndefinedProps(example);
+      expect(example).toEqual({ thing: undefined });
     });
   });
 });

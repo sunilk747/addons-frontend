@@ -18,7 +18,6 @@ import addons, {
   isAddonLoading,
   loadAddons,
   loadAddonResults,
-  removeUndefinedProps,
 } from 'core/reducers/addons';
 import {
   createFetchAddonResult,
@@ -501,28 +500,6 @@ describe(__filename, () => {
     it('allows a missing addons property', () => {
       // This could happen when there are zero results from an API request.
       expect(loadAddons({})).toMatchObject({ payload: { addons: {} } });
-    });
-  });
-
-  describe('removeUndefinedProps', () => {
-    it('removes undefined properties', () => {
-      expect(removeUndefinedProps({ thing: undefined })).toEqual({});
-    });
-
-    it('preserves falsy properties', () => {
-      expect(removeUndefinedProps({ thing: false })).toEqual({ thing: false });
-    });
-
-    it('preserves other properties', () => {
-      expect(removeUndefinedProps({ thing: 'thing' })).toEqual({
-        thing: 'thing',
-      });
-    });
-
-    it('does not modify the original object', () => {
-      const example = { thing: undefined };
-      removeUndefinedProps(example);
-      expect(example).toEqual({ thing: undefined });
     });
   });
 
