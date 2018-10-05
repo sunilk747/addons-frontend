@@ -74,7 +74,7 @@ export function removeUndefinedProps(object: Object): Object {
   return newObject;
 }
 
-export const getAddonStructuredData = ({
+export const getAddonJsonLinkedData = ({
   addon,
 }: {|
   addon: AddonType,

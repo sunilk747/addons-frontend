@@ -46,7 +46,7 @@ import {
 } from 'core/constants';
 import { withInstallHelpers } from 'core/installAddon';
 import { isTheme, nl2br, sanitizeHTML, sanitizeUserHTML } from 'core/utils';
-import { getAddonStructuredData, getErrorMessage } from 'core/utils/addons';
+import { getAddonJsonLinkedData, getErrorMessage } from 'core/utils/addons';
 import { getClientCompatibility as _getClientCompatibility } from 'core/utils/compatibility';
 import { getAddonIconUrl } from 'core/imageUtils';
 import translate from 'core/i18n/translate';
@@ -469,11 +469,10 @@ export class AddonBase extends React.Component {
 
   renderJsonLinkedData() {
     const { addon } = this.props;
-    const structuredData = getAddonStructuredData({ addon });
 
     return (
       <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
+        {JSON.stringify(getAddonJsonLinkedData({ addon }))}
       </script>
     );
   }

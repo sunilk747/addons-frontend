@@ -10,7 +10,7 @@ import {
 } from 'core/constants';
 import { createInternalAddon } from 'core/reducers/addons';
 import {
-  getAddonStructuredData,
+  getAddonJsonLinkedData,
   getErrorMessage,
   getFileHash,
   removeUndefinedProps,
@@ -126,11 +126,11 @@ describe(__filename, () => {
     });
   });
 
-  describe('getAddonStructuredData', () => {
+  describe('getAddonJsonLinkedData', () => {
     it('returns structured data', () => {
       const addon = createInternalAddon(fakeAddon);
 
-      expect(getAddonStructuredData({ addon })).toEqual({
+      expect(getAddonJsonLinkedData({ addon })).toEqual({
         '@context': 'http://schema.org/WebApplication',
         '@type': 'WebApplication',
         name: addon.name,
@@ -160,7 +160,7 @@ describe(__filename, () => {
         current_version: null,
       });
 
-      expect(getAddonStructuredData({ addon })).not.toHaveProperty('version');
+      expect(getAddonJsonLinkedData({ addon })).not.toHaveProperty('version');
     });
 
     it('returns structured data without rating if not available', () => {
@@ -169,7 +169,7 @@ describe(__filename, () => {
         ratings: null,
       });
 
-      expect(getAddonStructuredData({ addon })).not.toHaveProperty(
+      expect(getAddonJsonLinkedData({ addon })).not.toHaveProperty(
         'aggregateRating',
       );
     });
