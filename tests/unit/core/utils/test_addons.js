@@ -131,7 +131,7 @@ describe(__filename, () => {
       const addon = createInternalAddon(fakeAddon);
 
       expect(getAddonJsonLinkedData({ addon })).toEqual({
-        '@context': 'http://schema.org/WebApplication',
+        '@context': 'http://schema.org',
         '@type': 'WebApplication',
         name: addon.name,
         url: addon.url,

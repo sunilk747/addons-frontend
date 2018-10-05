@@ -91,7 +91,7 @@ export const getAddonJsonLinkedData = ({
   }
 
   return removeUndefinedProps({
-    '@context': 'http://schema.org/WebApplication',
+    '@context': 'http://schema.org',
     '@type': 'WebApplication',
     name: addon.name,
     url: addon.url,
